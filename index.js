@@ -11,7 +11,7 @@ app.use(cors());
 app.use(express.json())
 
 
-const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.l12hi.mongodb.net/myFirstDatabase?retryWrites=true&w=majority `;
+const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.l12hi.mongodb.net/tourimo_travle?retryWrites=true&w=majority `;
 
 
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
@@ -39,23 +39,22 @@ async function run() {
         // POST API
         app.post('/confirms', async (req, res) => {
             console.log('hitting the post')
-            // const packageConfirm = req.body;
-            // console.log('hit the post api', packageConfirm);
+            const packageConfirm = req.body;
+            console.log('hit the post api', packageConfirm);
 
-            // const result = await confirmPackageCollection.insertOne(packageConfirm);
-            // console.log(result);
-            // res.json(result)
+            const result = await confirmPackageCollection.insertOne(packageConfirm);
+            console.log(result);
+            res.json(result)
             res.send('hitted ')
         });
-        // app.post('/confirms', async (req, res) => {
-        //     console.log('hitting the confirms')
-        //     const packageConfirm = req.body;
-        //     const result = await confirmPackageCollection.insertOne(packageConfirm);
-        //     console.log('hitting the post', req.body);
-        //     res.json(result);
-        //     console.log(`A document was inserted with the _id: ${result.insertedId}`);
 
-        // })
+        // confirm package 
+        app.get('/confirms', async (req, res) => {
+            const cursor = confirmPackageCollection.find({});
+            const users = await cursor.toArray();
+            res.send(users)
+        })
+        
 
         // to delete users 
         app.delete('/packages/:id', async (req, res) => {
