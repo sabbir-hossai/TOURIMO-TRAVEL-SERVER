@@ -1,4 +1,3 @@
-
 const express = require('express');
 const { MongoClient } = require('mongodb');
 const app = express();
@@ -12,45 +11,57 @@ app.use(cors());
 app.use(express.json())
 
 
-
-
-// user:  myfirstmongodb1
-// password qVnd3W97wQCyAdh6
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.l12hi.mongodb.net/myFirstDatabase?retryWrites=true&w=majority `;
 
-// const uri = "mongodb+srv://myfirstmongodb1:qVnd3W97wQCyAdh6@cluster0.l12hi.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
+
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 async function run() {
     try {
         await client.connect();
-        console.log('database connected successfully')
+        // console.log('database connected successfully')
         const database = client.db("tourimo_travle");
-        const userCollection = database.collection("tour packeage");
-        // to get users
+        const packageCollection = database.collection("tour packeage");
+        const guideCollection = database.collection("tourist_guide");
+        const confirmPackageCollection = database.collection("confirmPackage");
+        // to get package
         app.get('/packages', async (req, res) => {
-            const cursor = userCollection.find({});
+            const cursor = packageCollection.find({});
+            const users = await cursor.toArray();
+            res.send(users)
+        })
+        // to get guide
+        app.get('/guides', async (req, res) => {
+            const cursor = guideCollection.find({});
             const users = await cursor.toArray();
             res.send(users)
         })
         // create a document to insert
-        app.post('/packages', async (req, res) => {
-            const newUser = req.body;
-            const result = await userCollection.insertOne(newUser);
-            console.log('hitting the post', req.body);
-            res.json(result);
-            console.log(`A document was inserted with the _id: ${result.insertedId}`);
+        // POST API
+        app.post('/confirms', async (req, res) => {
+            console.log('hitting the post')
+            // const packageConfirm = req.body;
+            // console.log('hit the post api', packageConfirm);
 
-        })
+            // const result = await confirmPackageCollection.insertOne(packageConfirm);
+            // console.log(result);
+            // res.json(result)
+            res.send('hitted ')
+        });
+        // app.post('/confirms', async (req, res) => {
+        //     console.log('hitting the confirms')
+        //     const packageConfirm = req.body;
+        //     const result = await confirmPackageCollection.insertOne(packageConfirm);
+        //     console.log('hitting the post', req.body);
+        //     res.json(result);
+        //     console.log(`A document was inserted with the _id: ${result.insertedId}`);
+
+        // })
 
         // to delete users 
         app.delete('/packages/:id', async (req, res) => {
             const id = req.params.id;
-            // const query = { _id: ObjectId(id) };
-            // const result = await userCollection.deleteOne(query);
-            // console.log('deleting user with id', result);
-            // res.json(result);
             const query = { _id: ObjectId(id) };
-            const result = await userCollection.deleteOne(query);
+            const result = await packageCollection.deleteOne(query);
             if (result.deletedCount === 1) {
                 console.log("Successfully deleted one document.", result);
             } else {
@@ -80,7 +91,7 @@ async function run() {
         app.get('/packages/:id', async (req, res) => {
             const id = req.params.id;
             const query = { _id: ObjectId(id) };
-            const updateUser = await userCollection.findOne(query);
+            const updateUser = await packageCollection.findOne(query);
             res.send(updateUser)
         })
 
