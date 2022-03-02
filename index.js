@@ -54,7 +54,15 @@ async function run() {
             const users = await cursor.toArray();
             res.send(users)
         })
-        
+        // delete confirm package api 
+        app.delete('/confirms/:id', async (req, res) => {
+            const id = req.params.id;
+            console.log('deleting with id', id);
+            const query = { _id: ObjectId(id) };
+            const result = await confirmPackageCollection.deleteOne(query);
+            res.json(result);
+        })
+
 
         // to delete users 
         app.delete('/packages/:id', async (req, res) => {
