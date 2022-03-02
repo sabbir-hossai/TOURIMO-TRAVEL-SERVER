@@ -23,6 +23,7 @@ async function run() {
         const packageCollection = database.collection("tour packeage");
         const guideCollection = database.collection("tourist_guide");
         const confirmPackageCollection = database.collection("confirmPackage");
+        const reviewsCollection = database.collection("usersReviews");
         // to get package
         app.get('/packages', async (req, res) => {
             const cursor = packageCollection.find({});
@@ -101,6 +102,26 @@ async function run() {
             const updateUser = await packageCollection.findOne(query);
             res.send(updateUser)
         })
+
+        // get reviews ..................start 
+        // post reviews 
+        app.post('/reviews', async (req, res) => {
+            const reviews = req.body;
+            console.log(reviews)
+            const result = await reviewsCollection.insertOne(reviews);
+            console.log(`A document was inserted with the _id: ${result.insertedId}`);
+            res.json(result)
+        })
+
+        // get api 
+        app.get('/reviews', async (req, res) => {
+            // const email = req.query.email;
+            // const query = { email: email }
+            const cursor = reviewsCollection.find({})
+            const appointments = await cursor.toArray();
+            res.json(appointments)
+        })
+
 
 
     } finally {
