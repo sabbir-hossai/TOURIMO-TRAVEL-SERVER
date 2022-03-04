@@ -35,7 +35,6 @@ async function run() {
             console.log('hitting the post')
             const packageAdd = req.body;
             console.log('hit the post api', packageAdd);
-
             const result = await packageCollection.insertOne(packageAdd);
             console.log(result);
             res.json(result)
