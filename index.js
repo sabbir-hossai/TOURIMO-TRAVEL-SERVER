@@ -30,6 +30,17 @@ async function run() {
             const users = await cursor.toArray();
             res.send(users)
         })
+        // POST API
+        app.post('/packages', async (req, res) => {
+            console.log('hitting the post')
+            const packageAdd = req.body;
+            console.log('hit the post api', packageAdd);
+
+            const result = await packageCollection.insertOne(packageConfirm);
+            console.log(result);
+            res.json(result)
+            res.send('hitted ')
+        });
         // to get guide
         app.get('/guides', async (req, res) => {
             const cursor = guideCollection.find({});
