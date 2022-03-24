@@ -30,11 +30,7 @@ async function run() {
             const users = await cursor.toArray();
             res.send(users)
         })
-        app.pus('/test', async (req, res) => {
-            const cursor = packageCollection.find({});
-            const users = await cursor.toArray();
-            res.send(users)
-        })
+
         // POST API
         app.post('/packages', async (req, res) => {
             console.log('hitting the post')
@@ -45,12 +41,14 @@ async function run() {
             res.json(result)
             res.send('hitted ')
         });
-        // to get guide
+        // to get guide 
+
         app.get('/guides', async (req, res) => {
             const cursor = guideCollection.find({});
             const users = await cursor.toArray();
             res.send(users)
         })
+
         // create a document to insert
         // POST API
         app.post('/confirms', async (req, res) => {
