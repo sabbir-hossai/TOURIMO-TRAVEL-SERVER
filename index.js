@@ -30,6 +30,11 @@ async function run() {
             const users = await cursor.toArray();
             res.send(users)
         })
+        app.pus('/test', async (req, res) => {
+            const cursor = packageCollection.find({});
+            const users = await cursor.toArray();
+            res.send(users)
+        })
         // POST API
         app.post('/packages', async (req, res) => {
             console.log('hitting the post')
@@ -144,7 +149,7 @@ run().catch(console.dir);
 
 
 app.get('/', (req, res) => {
-    res.send('Hello World!')
+    res.send('Hello TORIMO!')
 })
 
 app.listen(port, () => {
